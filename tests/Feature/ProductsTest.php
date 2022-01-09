@@ -108,6 +108,33 @@ class ProductsTest extends TestCase
 
         // Check
         $response->assertOk();
+        $response->assertJson(['success' => true]);
         $this->assertEquals(2, Product::query()->count());
+    }
+
+    public function test_get_one_unauthenticated()
+    {
+        // Arrange
+        $product = Product::factory()->create();
+
+        // Execute
+        $response = $this->getJson("/api/products/{$product->getKey()}");
+
+        // Check
+        $response->assertStatus(401);
+    }
+
+    public function test_get_one_authenticated()
+    {
+        // Arrange
+        Sanctum::actingAs(User::factory()->create(), ['*']);
+        $product = Product::factory()->create();
+
+        // Execute
+        $response = $this->getJson("/api/products/{$product->getKey()}");
+
+        // Check
+        $response->assertOk();
+        $response->assertJson($product->only('id', 'name', 'description', 'price'));
     }
 }

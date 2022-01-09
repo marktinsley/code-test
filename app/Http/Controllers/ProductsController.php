@@ -42,7 +42,7 @@ class ProductsController extends Controller
      */
     public function show(Product $product)
     {
-        //
+        return $product;
     }
 
     /**
@@ -66,10 +66,10 @@ class ProductsController extends Controller
      * Remove the specified resource from storage.
      *
      * @param Product $product
-     * @return Response
+     * @return array{success: bool}
      */
-    public function destroy(Product $product)
+    public function destroy(Product $product): array
     {
-        return $product->delete();
+        return ['success' => $product->delete()];
     }
 }
