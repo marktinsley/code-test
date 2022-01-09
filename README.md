@@ -1,5 +1,5 @@
-Hello Mark! Thank you for considering joining the Lawline team. Below is a coding exercise that will allow you
-to highlight your skills.
+Hello Mark! Thank you for considering joining the Lawline team. Below is a coding exercise that will allow you to
+highlight your skills.
 
 You have up to 48 hours to submit, however, we respect your time and expect this to only take a few hours. Please make
 commits reguarly so we can track your progress.
@@ -10,7 +10,7 @@ commits reguarly so we can track your progress.
 2. Run composer install
 3. Perform the configuration for a [fresh install of Laravel](https://laravel.com/docs/7.x)
 4. Update the first line of this README with your name (so that it reads "Hello, YOUR NAME!"). Commit this change. This
-will serve as a starting timestamp.
+   will serve as a starting timestamp.
 5. Complete the exercise below.
 6. Commit progress regularly.
 7. When your're done, upload your code.
@@ -62,7 +62,9 @@ Each product must have, but is not limited to:
 
 #### Authentication
 
-You must implement an authentication system so that the API knows which of the users is making the request. All requests should ensure that an authorized user is making the request. In the event of an unauthorized user, an error should be thrown.
+You must implement an authentication system so that the API knows which of the users is making the request. All requests
+should ensure that an authorized user is making the request. In the event of an unauthorized user, an error should be
+thrown.
 
 #### Requests
 
@@ -88,17 +90,18 @@ You must write tests to back up your code. You are free to use any testing tools
 
 Create a simple ui interface, written in your favorite JS Framework (Preferred: VueJS) for a user to
 
-- View all avaliable products
+- View all available products
 
 **Bonus*
+
 - Authenticate
 - Add/Remove products
-
 
 ## Completion
 
 When you are finished you will push up the application to a personal git repo. Then please notify James via email
-[james.terrono@furthered.com](mailto:james.terrono@furthered.com?subject=Lawline%20Code%20Challenge) with the subject Lawline Code Challenge and the link to the github repo. Please include:
+[james.terrono@furthered.com](mailto:james.terrono@furthered.com?subject=Lawline%20Code%20Challenge) with the subject
+Lawline Code Challenge and the link to the github repo. Please include:
 
 - Instructions on how to create and seed database tables
 - Instructions on how authentication works
