@@ -137,4 +137,30 @@ class ProductsTest extends TestCase
         $response->assertOk();
         $response->assertJson($product->only('id', 'name', 'description', 'price'));
     }
+
+    public function test_get_list_unauthenticated()
+    {
+        // Execute
+        $response = $this->getJson('/api/products');
+
+        // Check
+        $response->assertStatus(401);
+    }
+
+    public function test_get_list_authenticated()
+    {
+        // Arrange
+        Sanctum::actingAs(User::factory()->create(), ['*']);
+        $products = Product::factory()->times(5)->create();
+
+        // Execute
+        $response = $this->getJson('/api/products?per_page=3&page=2');
+
+        // Check
+        $response->assertOk();
+        $response->assertJson([
+            'current_page' => 2,
+            'data' => $products->skip(3)->each->refresh()->values()->toArray(),
+        ]);
+    }
 }

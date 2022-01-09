@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AddUpdateProduct;
 use App\Models\Product;
 use App\Money\Money;
+use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -13,11 +14,14 @@ class ProductsController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return Paginator
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        return Product::query()
+            ->simplePaginate(
+                $request->query('per_page') > 0 ? $request->query('per_page') : 25
+            );
     }
 
     /**
