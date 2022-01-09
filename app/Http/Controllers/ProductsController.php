@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AddUpdateProduct;
 use App\Models\Product;
+use App\Money\Money;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class ProductsController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -20,25 +23,22 @@ class ProductsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @return Product
      */
-    public function store(Request $request): Product
+    public function store(AddUpdateProduct $request): Product
     {
-        $validated = $request->validate([
-            'name' => 'required',
-            'description' => 'required',
-            'price' => 'required|numeric',
-        ]);
+        $data = $request->validated();
+        $data['price'] = Money::toInt($data['price']);
 
-        return Product::query()->create($validated);
+        return Product::query()->create($data);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param \App\Models\Product $product
-     * @return \Illuminate\Http\Response
+     * @param Product $product
+     * @return Response
      */
     public function show(Product $product)
     {
@@ -48,20 +48,25 @@ class ProductsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Product $product
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Product $product
+     * @return Product
      */
-    public function update(Request $request, Product $product)
+    public function update(AddUpdateProduct $request, Product $product): Product
     {
-        //
+        $data = $request->validated();
+        $data['price'] = Money::toInt($data['price']);
+        $product->fill($data);
+        $product->save();
+
+        return $product;
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Models\Product $product
-     * @return \Illuminate\Http\Response
+     * @param Product $product
+     * @return Response
      */
     public function destroy(Product $product)
     {
