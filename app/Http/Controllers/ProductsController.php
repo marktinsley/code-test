@@ -70,6 +70,6 @@ class ProductsController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        return $product->delete();
     }
 }
