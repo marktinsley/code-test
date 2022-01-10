@@ -18,4 +18,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/user', fn(Request $request) => $request->user());
 
     Route::apiResource('products', \App\Http\Controllers\ProductsController::class);
+    Route::apiResource('user-products', \App\Http\Controllers\UserProductsController::class)
+        ->only('index', 'update', 'destroy');
 });

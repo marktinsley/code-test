@@ -11,6 +11,19 @@
       binary-state-sort
       :rows-per-page-options="[ 3, 5, 7, 10, 15, 20, 25, 50 ]"
     >
+      <template v-slot:top>
+        <q-toggle
+          label="Only my products"
+          v-model="onlyMine"
+        />
+        <q-space/>
+        <q-input borderless dense debounce="300" color="primary" v-model="filter">
+          <template v-slot:append>
+            <q-icon name="search"/>
+          </template>
+        </q-input>
+      </template>
+
       <template v-slot:top-right>
         <q-input borderless dense debounce="300" v-model="filter" placeholder="Search">
           <template v-slot:append>
@@ -24,7 +37,7 @@
 </template>
 
 <script>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watchEffect } from 'vue'
 import { api } from 'boot/axios'
 
 const columns = [
@@ -50,6 +63,7 @@ export default {
     const rows = ref([])
     const filter = ref('')
     const loading = ref(false)
+    const onlyMine = ref(false)
     const pagination = ref({
       sortBy: 'desc',
       descending: false,
@@ -65,7 +79,16 @@ export default {
       loading.value = true
 
       const response = await api.get(
-        `api/products?per_page=${rowsPerPage}&page=${page}&filter=${filter || ''}&sort_by=${sortBy || ''}&descending=${descending ? 1 : 0}`
+        'api/products', {
+          params: {
+            per_page: rowsPerPage,
+            page,
+            filter: filter || '',
+            sort_by: sortBy || '',
+            descending: descending ? 1 : 0,
+            only_mine: onlyMine.value ? 1 : 0
+          }
+        }
       )
       rows.value = response.data.data
 
@@ -82,7 +105,16 @@ export default {
       // get initial data from server (1st page)
       onRequest({
         pagination: pagination.value,
+        onlyMine: false,
         filter: undefined
+      })
+    })
+
+    watchEffect(() => {
+      onRequest({
+        pagination: pagination.value,
+        onlyMine: onlyMine.value,
+        filter: filter.value
       })
     })
 
@@ -92,6 +124,7 @@ export default {
       pagination,
       columns,
       rows,
+      onlyMine,
 
       onRequest
     }

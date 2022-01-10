@@ -25,7 +25,7 @@ class ProductsController extends Controller
             'price',
         ];
 
-        return Product::query()
+        return ($request->query('only_mine') ? $request->user()->products() : Product::query())
             ->when(
                 $request->query('filter'),
                 fn(Builder $query) => $query->where('name', 'LIKE', "%{$request->query('filter')}%")
