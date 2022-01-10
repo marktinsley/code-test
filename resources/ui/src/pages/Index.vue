@@ -65,7 +65,7 @@ export default {
       loading.value = true
 
       const response = await api.get(
-        `http://localhost:8000/api/products?per_page=${rowsPerPage}&page=${page}&filter=${filter || ''}&sort_by=${sortBy || ''}&descending=${descending ? 1 : 0}`
+        `api/products?per_page=${rowsPerPage}&page=${page}&filter=${filter || ''}&sort_by=${sortBy || ''}&descending=${descending ? 1 : 0}`
       )
       rows.value = response.data.data
 
