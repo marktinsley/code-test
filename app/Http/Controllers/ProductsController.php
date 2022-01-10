@@ -5,21 +5,36 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AddUpdateProduct;
 use App\Models\Product;
 use App\Money\Money;
-use Illuminate\Contracts\Pagination\Paginator;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ProductsController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return Paginator
+     * @return LengthAwarePaginator
      */
     public function index(Request $request)
     {
+        $sortable = [
+            'name',
+            'description',
+            'price',
+        ];
+
         return Product::query()
-            ->simplePaginate(
+            ->when(
+                $request->query('filter'),
+                fn(Builder $query) => $query->where('name', 'LIKE', "%{$request->query('filter')}%")
+            )
+            ->when(
+                $request->query('sort_by') && in_array($request->query('sort_by'), $sortable),
+                fn(Builder $query) => $query->orderBy($request->query('sort_by'), $request->query('descending') ? 'desc' : 'asc')
+            )
+            ->paginate(
                 $request->query('per_page') > 0 ? $request->query('per_page') : 25
             );
     }
